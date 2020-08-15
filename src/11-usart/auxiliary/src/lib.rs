@@ -14,7 +14,7 @@ use f3::hal::{
     stm32f30x::{self, USART1},
 };
 
-pub fn init() -> (&'static mut usart1::RegisterBlock, MonoTimer, ITM) {
+pub fn init() -> (&'static mut usart1::RegisterBlock, /* MonoTimer, */ITM) {
     let cp = cortex_m::Peripherals::take().unwrap();
     let dp = stm32f30x::Peripherals::take().unwrap();
 
@@ -52,7 +52,7 @@ pub fn init() -> (&'static mut usart1::RegisterBlock, MonoTimer, ITM) {
     unsafe {
         (
             &mut *(USART1::ptr() as *mut _),
-            MonoTimer::new(cp.DWT, clocks),
+            //MonoTimer::new(cp.DWT, clocks),
             cp.ITM,
         )
     }

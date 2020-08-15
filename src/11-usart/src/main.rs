@@ -7,7 +7,8 @@ use aux11::{entry, iprint, iprintln};
 
 #[entry]
 fn main() -> ! {
-    let (usart1, mono_timer, itm) = aux11::init();
+    let (usart1, /*mono_timer,*/ mut itm) = aux11::init();
+    iprintln!(&mut itm.stim[0], "init success");
 
     // Send a single character
     usart1.tdr.write(|w| w.tdr().bits(u16::from(b'X')));
