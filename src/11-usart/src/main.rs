@@ -39,7 +39,12 @@ impl fmt::Write for SerialPort {
 
 impl SerialPort {
     fn recv_byte(&mut self) -> u8 {
-        while self.usart1.isr.read().rxne().bit_is_clear() {}
+        while self.usart1.isr.read().rxne().bit_is_clear() {
+            if self.usart1.isr.read().ore().bit_is_set() {
+                self.usart1.icr.write(|w| w.orecf().set_bit());
+                return '?' as u8;
+            }
+        }
         self.usart1.rdr.read().rdr().bits() as u8
     }
 }
@@ -68,6 +73,7 @@ fn main() -> ! {
                         Err(e) => {
                             uprintln!(serial, "cannot push {}", e as char);
                             break;
+                            //continue;
                         }
                     }
                 }
